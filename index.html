@@ -28,54 +28,50 @@
     </section>
 
     <script>
-        // function getJSON(url) {
-        //     return new Promise(function(resolve, reject) {
-        //         var ajax = new XMLHttpRequest();
-        //         ajax.open("GET", url);
-        //         ajax.send();
-        //         ajax.onreadystatechange = function() {
-        //             if (ajax.readyState == 4) {
-        //                 resolve(JSON.parse(ajax.responseText));
-        //             }
-        //         }
-        //     })
-        // }
-
-        fetch('data/earth-like-results.json')
-
-            .then((resp) => resp.json())
-
-            .then(function(data){
-
-              
-
+        function getJSON(url) {
+            return new Promise(function(resolve, reject) {
+                var ajax = new XMLHttpRequest();
+                ajax.open("GET", url);
+                ajax.send();
+                ajax.onreadystatechange = function() {
+                    if (ajax.readyState == 4) {
+                        resolve(JSON.parse(ajax.responseText));
+                    }
+                }
             })
+        };
 
-            // .then(function(response) {
-            //     var arrayPlanets = (response.results.map(function(url) {
-            //         return getJSON(url);
-            //     }));
-            //     return Promise.all(arrayPlanets);
-            //     console.log(arrayPlanets);
-            // })
-            //
-            // .then(function(data) { //se hace en funcion para q la sincronia no se rompa
-            //     data.forEach(function(planetas){
-            //       var contenedor = document.getElementById('contenedor');
-            //       var nombre = planetas.pl_name;
-            //       var masa = planetas.pl_masse;
-            //       var year = planetas.pl_disc;
-            //       var telescopio = planetas.pl_telescope;
-            //       plantillaFinal = plantilla.replace("__name__", nombre)
-            //           .replace("__masa__", masa)
-            //           .replace("__year__", year)
-            //           .replace("__telescope__", telescopio);
-            //       contenedor.innerHTML += plantillaFinal;
-            //     });
-
-
-            // });
-
+        // fetch('data/earth-like-results.json')
+        //
+        //     .then((resp) => resp.json())
+        //
+        //     .then(function(data){
+        //
+        //
+        //
+        //     })
+        getJSON('data/earth-like-results.json')
+        .then(function(response) {
+            var arrayPlanets = (response.results.map(function(url) {
+                return getJSON(url);
+            }));
+            return Promise.all(arrayPlanets);
+            console.log(arrayPlanets);
+        })
+        .then(function(arreglo) { //se hace en funcion para q la sincronia no se rompa
+            arreglo.forEach(function(planetas){
+              var contenedor = document.getElementById('contenedor');
+              var nombre = planetas.pl_name;
+              var masa = planetas.pl_masse;
+              var year = planetas.pl_disc;
+              var telescopio = planetas.pl_telescope;
+              plantillaFinal = plantilla.replace("__name__", nombre)
+                  .replace("__masa__", masa)
+                  .replace("__year__", year)
+                  .replace("__telescope__", telescopio);
+              contenedor.innerHTML += plantillaFinal;
+            });
+        });
         //
         // function mostrarPlaneta(planetas) {
         //     var contenedor = document.getElementById('contenedor');
